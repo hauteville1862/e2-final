@@ -36,3 +36,33 @@ class Storage:
                 },
             ],
         }
+
+    def load(self):
+        try:
+            with open(self.path, "r", encoding="utf-8") as file:
+                data = json.load(file)
+
+            if "high_score" not in data or "questions" not in data:
+                raise ValueError("state.json 구조가 올바르지 않습니다.")
+
+            return data
+
+        except FileNotFoundError:
+            return self.get_default_data()
+
+        except ValueError:
+            print("\n[알림] 데이터 파일이 손상되어 기본 퀴즈 데이터로 초기화합니다.")
+            recovered = self.get_default_data()
+            self.save(recovered)
+            return recovered
+
+    def save(self, data):
+        try:
+            with open(self.path, "w", encoding="utf-8") as file:
+                json.dump(data, file, ensure_ascii=False, indent=4)
+            return True
+
+        except OSError as error:
+            print(f"\n[알림] 데이터를 저장하지 못했습니다. ({error})")
+            print("[알림] 프로그램은 계속 실행되지만 이번 변경 내용은 저장되지 않습니다.")
+            return False
