@@ -27,53 +27,47 @@ class QuizCLI:
 
             return value
 
+    def get_nonempty_text(self, prompt):
+        while True:
+            text = input(prompt).strip()
+
+            if text == "":
+                print("[알림] 내용은 비어 있을 수 없습니다.")
+                continue
+
+            return text
+
     def wait_for_enter(self):
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
 
-    def run_quiz(self):
-        data = self.storage.load()
+    def create_quiz_list(self, saved_quizzes):
+        """저장된 딕셔너리 목록을 Quiz 객체 목록으로 바꾼다."""
+        quiz_list = []
 
-        if not data["quizzes"]:
-            print("\n[알림] 등록된 문제가 없습니다. 문제를 먼저 추가해주세요!")
-            self.wait_for_enter()
-            return
-
-        quiz_bank = []
-        for quiz_data in data["quizzes"]:
-            quiz_bank.append(
+        for quiz_data in saved_quizzes:
+            quiz_list.append(
                 Quiz(quiz_data["question"], quiz_data["choices"], quiz_data["answer"])
             )
 
-        game = QuizGame(quiz_bank)
-        interrupted = None
+        return quiz_list
 
-        # 퀴즈 도중 Ctrl+C나 입력 종료가 발생해도 지금까지의 기록을 저장한 뒤 종료한다.
-        try:
-            while game.still_has_quizzes():
-                current_quiz = game.get_current_quiz()
+    def ask_one_quiz(self, game):
+        """문제 하나를 보여주고 답을 받아 채점한다."""
+        current_quiz = game.get_current_quiz()
+        current_quiz.show(game.quiz_number + 1)
 
-                current_quiz.show(game.quiz_number + 1)
+        user_answer = self.get_valid_int("\n정답을 입력하세요 (1-4): ", 1, 4)
 
-                user_answer = self.get_valid_int("\n정답을 입력하세요 (1-4): ", 1, 4)
-
-                if game.submit_answer(user_answer):
-                    print("정답입니다!")
-                else:
-                    print("틀렸습니다.")
-                    print(f"정답은 {current_quiz.answer}번이었습니다.")
-
-                print(f"현재 점수: {game.score}/{game.quiz_number}")
-
-        except (KeyboardInterrupt, EOFError) as error:
-            interrupted = error
-
-        print("\n" + "=" * 30)
-
-        if interrupted is not None:
-            print(f"퀴즈 중단! 지금까지 점수: {game.score}/{game.quiz_number}")
+        if game.submit_answer(user_answer):
+            print("정답입니다!")
         else:
-            print(f"퀴즈 종료! 최종 점수: {game.score}/{len(quiz_bank)}")
+            print("틀렸습니다.")
+            print(f"정답은 {current_quiz.answer}번이었습니다.")
 
+        print(f"현재 점수: {game.score}/{game.quiz_number}")
+
+    def save_result(self, data, game):
+        """푼 횟수를 올리고, 최고 점수를 갱신한 뒤 파일에 저장한다."""
         data["play_count"] += 1
 
         if game.score > data["best_score"]:
@@ -83,30 +77,47 @@ class QuizCLI:
         if not self.storage.save(data):
             print("[알림] 기록을 저장하지 못했습니다.")
 
-        print("=" * 30)
+    def run_quiz(self):
+        data = self.storage.load()
 
-        # 저장을 마쳤으니 원래 받은 중단 신호를 그대로 다시 올려보낸다.
-        # main.py가 Ctrl+C인지 입력 종료인지 구분해 안내하고 종료한다.
-        if interrupted is not None:
-            raise interrupted
+        if not data["quizzes"]:
+            print("\n[알림] 등록된 문제가 없습니다. 문제를 먼저 추가해주세요!")
+            self.wait_for_enter()
+            return
+
+        total = len(data["quizzes"])
+        game = QuizGame(self.create_quiz_list(data["quizzes"]))
+
+        try:
+            while game.still_has_quizzes():
+                self.ask_one_quiz(game)
+
+        except (KeyboardInterrupt, EOFError):
+            # 중단되어도 지금까지의 기록은 저장한다.
+            print("\n" + "=" * 30)
+            print(f"퀴즈 중단! 지금까지 점수: {game.score}/{game.quiz_number}")
+            self.save_result(data, game)
+            print("=" * 30)
+
+            # raise는 방금 잡은 예외를 그대로 다시 던진다.
+            # main.py가 Ctrl+C인지 입력 종료인지 구분해 안내하고 종료한다.
+            raise
+
+        print("\n" + "=" * 30)
+        print(f"퀴즈 종료! 최종 점수: {game.score}/{total}")
+        self.save_result(data, game)
+        print("=" * 30)
 
         self.wait_for_enter()
 
     def add_new_quiz(self):
         print("[새 문제 추가]")
 
-        question = input("문제 내용을 입력하세요: ").strip()
-        while question == "":
-            print("[알림] 문제 내용은 비어 있을 수 없습니다.")
-            question = input("문제 내용을 입력하세요: ").strip()
+        question = self.get_nonempty_text("문제 내용을 입력하세요: ")
 
         choices = []
         for i in range(1, 5):
-            choice = input(f"보기 {i}번을 입력하세요: ").strip()
-            while choice == "":
-                print("[알림] 보기 내용은 비어 있을 수 없습니다.")
-                choice = input(f"보기 {i}번을 입력하세요: ").strip()
-            choices.append(choice)
+            choices.append(self.get_nonempty_text(f"보기 {i}번을 입력하세요: "))
 
         answer = self.get_valid_int("정답 번호를 입력하세요 (1-4): ", 1, 4)
 

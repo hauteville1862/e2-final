@@ -154,7 +154,14 @@ python main.py
 
 ### 입력 예외 처리
 
-숫자 입력이 필요한 모든 곳에서 아래를 처리. 메뉴 선택(1~5)과 정답 입력(1~4)이 같은 함수를 쓰고 허용 범위만 인자로 다르다.
+입력 검증 함수는 두 개. 검사할 대상이 다르다.
+
+| 함수 | 검사 내용 | 쓰이는 곳 |
+|---|---|---|
+| `get_valid_int(prompt, min, max)` | 숫자인지, 허용 범위 안인지 | 메뉴 선택(1~5), 정답 입력(1~4), 정답 번호 입력(1~4) |
+| `get_nonempty_text(prompt)` | 비어 있지 않은지 | 문제 지문, 보기 1~4번 |
+
+둘 다 조건을 만족할 때까지 `while`로 다시 묻는다. 허용 범위만 인자로 바꾸면 되므로 같은 함수를 여러 곳에서 재사용한다.
 
 | 입력 | 동작 |
 |---|---|
@@ -194,7 +201,19 @@ python main.py
                 continue
 
             return value
+
+    def get_nonempty_text(self, prompt):
+        while True:
+            text = input(prompt).strip()
+
+            if text == "":
+                print("[알림] 내용은 비어 있을 수 없습니다.")
+                continue
+
+            return text
 ```
+
+두 함수 모두 같은 구조. `while True`로 반복하다가 조건을 만족하면 `return`으로 빠져나오고, 만족하지 못하면 안내 후 `continue`로 다시 묻는다.
 
 </details>
 
@@ -216,7 +235,16 @@ if __name__ == "__main__":
         sys.exit(0)
 ```
 
-퀴즈 도중 중단 시에는 `run_quiz`가 먼저 기록을 저장한 뒤 받은 예외를 그대로 다시 올려보낸다. 저장은 데이터를 아는 곳에서, 종료 안내는 진입점에서 담당.
+퀴즈 도중 중단 시에는 `run_quiz`가 먼저 기록을 저장한 뒤 예외를 다시 던진다.
+
+```python
+        except (KeyboardInterrupt, EOFError):
+            print(f"퀴즈 중단! 지금까지 점수: {game.score}/{game.quiz_number}")
+            self.save_result(data, game)
+            raise
+```
+
+인자 없는 `raise`는 방금 잡은 예외를 그대로 다시 던진다. 저장은 데이터를 아는 곳에서, 종료 안내는 진입점에서 담당하도록 역할을 나눈 것.
 
 </details>
 
@@ -251,6 +279,38 @@ e2-final/
 | `QuizGame` | 한 판의 진행 상태 — 현재 문제 번호, 점수, 남은 문제 여부 | 채점 방식 변경 |
 | `Storage` | `state.json` 읽기·쓰기, 파일 없음·손상 시 복구 | 저장 방식 변경 |
 | `QuizCLI` | 메뉴 출력, 입력 검증, 위 세 클래스를 조합해 기능 완성 | 화면 문구·메뉴 구성 변경 |
+
+<details>
+<summary>메서드를 나눈 기준 — run_quiz 예시</summary>
+
+`run_quiz`는 처음에 60줄짜리 메서드였다. 불러오기, 객체 변환, 문제 진행, 중단 처리, 결과 저장을 한 곳에서 모두 했다. "이 함수가 무엇을 하나"를 한 문장으로 답할 수 없어 세 메서드로 분리했다.
+
+| 메서드 | 하는 일 |
+|---|---|
+| `create_quiz_list()` | 저장된 딕셔너리를 `Quiz` 객체로 변환 |
+| `ask_one_quiz()` | 문제 하나를 출제하고 채점 |
+| `save_result()` | 푼 횟수·최고 점수 갱신 후 저장 |
+
+분리 후 `run_quiz`는 흐름만 남는다.
+
+```python
+        total = len(data["quizzes"])
+        game = QuizGame(self.create_quiz_list(data["quizzes"]))
+
+        try:
+            while game.still_has_quizzes():
+                self.ask_one_quiz(game)
+        except (KeyboardInterrupt, EOFError):
+            ...
+            raise
+
+        print(f"퀴즈 종료! 최종 점수: {game.score}/{total}")
+        self.save_result(data, game)
+```
+
+`while game.still_has_quizzes(): self.ask_one_quiz(game)` — "남은 문제가 있는 동안 한 문제씩 출제한다"로 읽힌다.
+
+</details>
 
 <details>
 <summary>클래스를 쓴 이유 — 함수만으로 만들었다면</summary>
@@ -340,7 +400,8 @@ class Quiz:
             if "best_score" not in data or "quizzes" not in data:
                 raise ValueError("state.json 구조가 올바르지 않습니다.")
 
-            data.setdefault("play_count", 0)
+            if "play_count" not in data:
+                data["play_count"] = 0
 
             return data
 

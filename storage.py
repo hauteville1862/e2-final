@@ -53,7 +53,8 @@ class Storage:
 
             # play_count는 나중에 추가된 항목이라, 예전에 저장된 파일에는 없을 수 있다.
             # 없으면 0으로 채워서 기존 퀴즈 데이터를 잃지 않고 그대로 사용한다.
-            data.setdefault("play_count", 0)
+            if "play_count" not in data:
+                data["play_count"] = 0
 
             return data
 
