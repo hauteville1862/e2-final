@@ -96,6 +96,19 @@ class QuizCLI:
 
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
 
+    def view_question_list(self):
+        data = self.storage.load()
+        print("[등록된 퀴즈 목록]")
+
+        if not data["questions"]:
+            print("등록된 문제가 없습니다.")
+        else:
+            for number, q in enumerate(data["questions"], 1):
+                print(f"{number}. {q['question']}")
+
+        print("-" * 30)
+        input("\n엔터를 누르면 메뉴로 돌아갑니다...")
+
     def main_menu(self):
         while True:
             print("="*40)
@@ -115,7 +128,7 @@ class QuizCLI:
             elif choice == 2:
                 self.add_new_question()
             elif choice == 3:
-                print("준비 중입니다.")
+                self.view_question_list()
             elif choice == 4:
                 print("준비 중입니다.")
             elif choice == 5:
