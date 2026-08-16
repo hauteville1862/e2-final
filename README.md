@@ -21,15 +21,15 @@
 
 ### 과제 목표
 
-- [미션 요구사항](docs/미션.md)
-- [평가 기준](docs/평가기준.md)
-- [작업 기록](docs/작업기록.md)
-
-구현 목표 세 가지.
+Python 기본 문법으로 콘솔 프로그램 하나를 처음부터 끝까지 완성하고, 그 과정을 Git으로 기록한다.
 
 - **객체 지향** — 역할이 다른 클래스로 코드 분리
 - **데이터 영속성** — JSON 파일 저장으로 종료 후에도 데이터 유지
 - **예외 처리** — 잘못된 입력, 강제 종료, 손상된 데이터 파일에도 비정상 종료 없음
+
+Git 측면에서는 기능 단위 커밋, 브랜치 분리와 병합, 원격 저장소 활용(`clone` / `pull`)을 직접 수행했다.
+
+과제 요구사항과 채점 기준은 `docs/미션.md`, `docs/평가기준.md`에 있다. 진행 과정과 설계 판단은 `docs/작업기록.md`에 정리했다.
 
 ---
 
@@ -68,12 +68,51 @@ python main.py
 <details>
 <summary>메뉴 화면</summary>
 
+```
+PS C:\Users\Yuhyun Lim\e2-final> python main.py
+========================================
+      세계 문학 작가 퀴즈
+========================================
+  1. 퀴즈 시작
+  2. 퀴즈 추가
+  3. 퀴즈 목록 보기
+  4. 최고 점수 확인
+  5. 종료
+----------------------------------------
+메뉴를 선택하세요 (1-5):
+```
+
 ![메뉴 화면](docs/screenshots/menu.png)
 
 </details>
 
 <details>
 <summary>퀴즈 풀기</summary>
+
+```
+메뉴를 선택하세요 (1-5): 1
+
+Q.1: '레 미제라블'의 저자로 프랑스의 대문호인 작가는?
+   1) 빅토르 위고
+   2) 에밀 졸라
+   3) 기 드 모파상
+   4) 알베르 카뮈
+
+정답을 입력하세요 (1-4): 1
+정답입니다!
+현재 점수: 1/1
+
+Q.2: 소설 '1984'와 '동물농장'을 쓴 영국 작가는?
+   1) 올더스 헉슬리
+   2) 조지 오웰
+   3) 버지니아 울프
+   4) 제임스 조이스
+
+정답을 입력하세요 (1-4): 3
+틀렸습니다.
+정답은 2번이었습니다.
+현재 점수: 1/2
+```
 
 ![퀴즈 풀기](docs/screenshots/play.png)
 
@@ -82,6 +121,21 @@ python main.py
 <details>
 <summary>퀴즈 추가</summary>
 
+```
+메뉴를 선택하세요 (1-5): 2
+[새 문제 추가]
+문제 내용을 입력하세요: 새 문제 추가 테스트
+보기 1번을 입력하세요: 1
+보기 2번을 입력하세요: 2
+보기 3번을 입력하세요: 3
+보기 4번을 입력하세요: 4
+정답 번호를 입력하세요 (1-4): 1
+
+문제가 성공적으로 추가되었습니다!
+
+엔터를 누르면 메뉴로 돌아갑니다...
+```
+
 ![퀴즈 추가](docs/screenshots/add_quiz.png)
 
 </details>
@@ -89,12 +143,39 @@ python main.py
 <details>
 <summary>퀴즈 목록</summary>
 
+```
+메뉴를 선택하세요 (1-5): 3
+[등록된 퀴즈 목록]
+1. '레 미제라블'의 저자로 프랑스의 대문호인 작가는?
+2. 소설 '1984'와 '동물농장'을 쓴 영국 작가는?
+3. 1946년 노벨 문학상을 수상했으며, '데미안', '수레바퀴 아래서' 등을 집필한 독일의 작가는?
+4. 미국 잃어버린 세대의 대표 작가로 '위대한 개츠비'를 쓴 사람은?
+5. 러시아 문학의 거장으로 '죄와 벌'을 집필한 작가는?
+------------------------------
+
+엔터를 누르면 메뉴로 돌아갑니다...
+```
+
 ![퀴즈 목록](docs/screenshots/quiz_list.png)
 
 </details>
 
 <details>
 <summary>퀴즈 추가 후 목록 (5개 → 6개)</summary>
+
+```
+메뉴를 선택하세요 (1-5): 3
+[등록된 퀴즈 목록]
+1. '레 미제라블'의 저자로 프랑스의 대문호인 작가는?
+2. 소설 '1984'와 '동물농장'을 쓴 영국 작가는?
+3. 1946년 노벨 문학상을 수상했으며, '데미안', '수레바퀴 아래서' 등을 집필한 독일의 작가는?
+4. 미국 잃어버린 세대의 대표 작가로 '위대한 개츠비'를 쓴 사람은?
+5. 러시아 문학의 거장으로 '죄와 벌'을 집필한 작가는?
+6. 새 문제 추가 테스트
+------------------------------
+
+엔터를 누르면 메뉴로 돌아갑니다...
+```
 
 ![퀴즈 추가 후 목록](docs/screenshots/quiz_list_after_add.png)
 
@@ -104,6 +185,19 @@ python main.py
 
 <details>
 <summary>점수 확인</summary>
+
+```
+메뉴를 선택하세요 (1-5): 4
+[현재 최고 점수]
+
+현재까지의 최고 기록은 2점입니다.
+지금까지 1번 풀었습니다.
+
+더 높은 점수에 도전해보세요!
+------------------------------
+
+엔터를 누르면 메뉴로 돌아갑니다...
+```
 
 ![점수 확인](docs/screenshots/score.png)
 
@@ -173,6 +267,18 @@ python main.py
 
 <details>
 <summary>잘못된 입력 처리 화면</summary>
+
+```
+메뉴를 선택하세요 (1-5): abc
+[알림] 숫자만 입력 가능합니다.
+메뉴를 선택하세요 (1-5): 8
+[알림] 1~5 사이의 숫자를 입력해주세요.
+메뉴를 선택하세요 (1-5):
+[알림] 입력이 비어 있습니다. 다시 입력해주세요.
+메뉴를 선택하세요 (1-5):
+```
+
+세 경우 모두 프로그램이 멈추지 않고 같은 질문을 다시 던진다.
 
 ![잘못된 입력 처리](docs/screenshots/invalid_input.png)
 
@@ -425,7 +531,7 @@ class Quiz:
 
 | 항목 | 내용 |
 |---|---|
-| 커밋 수 | 17개 |
+| 커밋 수 | 20개 |
 | 브랜치 | `main`, `feature/quiz_game` |
 | 병합 | `feature/quiz_game` → `main` |
 
@@ -436,6 +542,13 @@ class Quiz:
 <details>
 <summary>브랜치 생성</summary>
 
+```
+$ git checkout -b feature/quiz_game
+Switched to a new branch 'feature/quiz_game'
+```
+
+`-b`는 브랜치를 새로 만들면서 그쪽으로 이동한다는 뜻. 새 브랜치는 현재 커밋에서 갈라진다.
+
 ![브랜치 생성](docs/screenshots/git_branch.png)
 
 </details>
@@ -443,12 +556,42 @@ class Quiz:
 <details>
 <summary>git log --oneline --graph (병합 전)</summary>
 
+```
+$ git --no-pager log --oneline --graph --all
+* c216597 (HEAD -> feature/quiz_game) Feat: 퀴즈 풀기 기능 구현 (출제, 채점, 결과 표시)
+| * 65cea0e (main) Docs: 미션 문서 및 브랜치 생성 스크린샷 추가
+|/
+* 7ffba24 Feat: 세계 문학 작가 기본 퀴즈 5문제 추가
+* 76da1ad (origin/main) Feat: Quiz 클래스 구현 (문제 출력, 정답 확인 메서드 포함)
+* 9d19781 Feat: Ctrl+C 및 EOF 발생 시 안전 종료 처리 추가
+* 767510c Feat: 메뉴 출력 및 선택 기능 구현
+* 3c3ab67 Chore: 저장소 초기 설정 (.gitignore, README 초안 추가)
+```
+
+`7ffba24`에서 두 갈래로 갈라진 상태(`|/`). 왼쪽이 `feature/quiz_game`, 오른쪽이 `main`.
+
 ![병합 전](docs/screenshots/git_log_graph_before_merge.png)
 
 </details>
 
 <details>
 <summary>git log --oneline --graph (병합 후)</summary>
+
+```
+$ git --no-pager log --oneline --graph
+*   cdab26e (HEAD -> main) Merge branch 'feature/quiz_game'
+|\
+| * c216597 (feature/quiz_game) Feat: 퀴즈 풀기 기능 구현 (출제, 채점, 결과 표시)
+* | 65cea0e Docs: 미션 문서 및 브랜치 생성 스크린샷 추가
+|/
+* 7ffba24 Feat: 세계 문학 작가 기본 퀴즈 5문제 추가
+* 76da1ad (origin/main) Feat: Quiz 클래스 구현 (문제 출력, 정답 확인 메서드 포함)
+* 9d19781 Feat: Ctrl+C 및 EOF 발생 시 안전 종료 처리 추가
+* 767510c Feat: 메뉴 출력 및 선택 기능 구현
+* 3c3ab67 Chore: 저장소 초기 설정 (.gitignore, README 초안 추가)
+```
+
+맨 위에 병합 커밋 `cdab26e`가 생기고, 갈라졌던 두 갈래가 다시 합쳐진다(`|\`). 아래 `|/`(갈라짐)와 위 `|\`(합쳐짐)가 짝을 이뤄 다이아몬드 모양이 된다.
 
 ![병합 후](docs/screenshots/git_log_graph_after_merge.png)
 
