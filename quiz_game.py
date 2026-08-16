@@ -1,18 +1,18 @@
 class QuizGame:
-    def __init__(self, q_list):
-        self.question_number = 0
+    def __init__(self, quiz_list):
+        self.quiz_number = 0
         self.score = 0
-        self.question_list = q_list
+        self.quiz_list = quiz_list
 
-    def still_has_questions(self):
-        return self.question_number < len(self.question_list)
+    def still_has_quizzes(self):
+        return self.quiz_number < len(self.quiz_list)
 
-    def get_current_question(self):
-        return self.question_list[self.question_number]
+    def get_current_quiz(self):
+        return self.quiz_list[self.quiz_number]
 
     def submit_answer(self, user_answer):
-        is_correct = self.get_current_question().is_correct(user_answer)
-        self.question_number += 1
+        is_correct = self.get_current_quiz().is_correct(user_answer)
+        self.quiz_number += 1
 
         if is_correct:
             self.score += 1

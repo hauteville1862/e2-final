@@ -7,9 +7,9 @@ class Storage:
 
     def get_default_data(self):
         return {
-            "high_score": 0,
+            "best_score": 0,
             "play_count": 0,
-            "questions": [
+            "quizzes": [
                 {
                     "question": "'레 미제라블'의 저자로 프랑스의 대문호인 작가는?",
                     "choices": ["빅토르 위고", "에밀 졸라", "기 드 모파상", "알베르 카뮈"],
@@ -43,7 +43,7 @@ class Storage:
             with open(self.path, "r", encoding="utf-8") as file:
                 data = json.load(file)
 
-            if "high_score" not in data or "questions" not in data:
+            if "best_score" not in data or "quizzes" not in data:
                 raise ValueError("state.json 구조가 올바르지 않습니다.")
 
             # play_count는 나중에 추가된 항목이라, 예전에 저장된 파일에는 없을 수 있다.
