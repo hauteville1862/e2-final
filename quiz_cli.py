@@ -61,7 +61,9 @@ class QuizCLI:
         if quiz.score > data["high_score"]:
             print(f"최고 점수 갱신! ({data['high_score']} -> {quiz.score})")
             data["high_score"] = quiz.score
-            self.storage.save(data)
+
+            if not self.storage.save(data):
+                print("[알림] 최고 점수를 저장하지 못했습니다.")
 
         print("="*30)
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
@@ -109,6 +111,20 @@ class QuizCLI:
         print("-" * 30)
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
 
+    def show_high_score(self):
+        data = self.storage.load()
+        print("[현재 최고 점수]")
+
+        if data["high_score"] == 0:
+            print("\n아직 퀴즈를 풀지 않아 기록이 없습니다.")
+            print("\n퀴즈를 풀고 첫 기록을 남겨보세요!")
+        else:
+            print(f"\n현재까지의 최고 기록은 {data['high_score']}점입니다.")
+            print("\n더 높은 점수에 도전해보세요!")
+
+        print("-" * 30)
+        input("\n엔터를 누르면 메뉴로 돌아갑니다...")
+
     def main_menu(self):
         while True:
             print("="*40)
@@ -130,7 +146,7 @@ class QuizCLI:
             elif choice == 3:
                 self.view_question_list()
             elif choice == 4:
-                print("준비 중입니다.")
+                self.show_high_score()
             elif choice == 5:
                 print("\n게임을 종료합니다. 이용해주셔서 감사합니다!")
                 break
