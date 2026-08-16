@@ -58,12 +58,14 @@ class QuizCLI:
         print("\n" + "="*30)
         print(f"퀴즈 종료! 최종 점수: {quiz.score}/{len(question_bank)}")
 
+        data["play_count"] += 1
+
         if quiz.score > data["high_score"]:
             print(f"최고 점수 갱신! ({data['high_score']} -> {quiz.score})")
             data["high_score"] = quiz.score
 
-            if not self.storage.save(data):
-                print("[알림] 최고 점수를 저장하지 못했습니다.")
+        if not self.storage.save(data):
+            print("[알림] 기록을 저장하지 못했습니다.")
 
         print("="*30)
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
@@ -115,11 +117,12 @@ class QuizCLI:
         data = self.storage.load()
         print("[현재 최고 점수]")
 
-        if data["high_score"] == 0:
+        if data["play_count"] == 0:
             print("\n아직 퀴즈를 풀지 않아 기록이 없습니다.")
             print("\n퀴즈를 풀고 첫 기록을 남겨보세요!")
         else:
             print(f"\n현재까지의 최고 기록은 {data['high_score']}점입니다.")
+            print(f"지금까지 {data['play_count']}번 풀었습니다.")
             print("\n더 높은 점수에 도전해보세요!")
 
         print("-" * 30)

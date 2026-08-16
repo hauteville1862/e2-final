@@ -8,6 +8,7 @@ class Storage:
     def get_default_data(self):
         return {
             "high_score": 0,
+            "play_count": 0,
             "questions": [
                 {
                     "question": "'레 미제라블'의 저자로 프랑스의 대문호인 작가는?",
@@ -44,6 +45,10 @@ class Storage:
 
             if "high_score" not in data or "questions" not in data:
                 raise ValueError("state.json 구조가 올바르지 않습니다.")
+
+            # play_count는 나중에 추가된 항목이라, 예전에 저장된 파일에는 없을 수 있다.
+            # 없으면 0으로 채워서 기존 퀴즈 데이터를 잃지 않고 그대로 사용한다.
+            data.setdefault("play_count", 0)
 
             return data
 
