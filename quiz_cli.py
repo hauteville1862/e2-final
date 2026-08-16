@@ -66,6 +66,36 @@ class QuizCLI:
         print("="*30)
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
 
+    def add_new_question(self):
+        print("[새 문제 추가]")
+
+        question = input("문제 내용을 입력하세요: ").strip()
+        while question == "":
+            print("[알림] 문제 내용은 비어 있을 수 없습니다.")
+            question = input("문제 내용을 입력하세요: ").strip()
+
+        choices = []
+        for i in range(1, 5):
+            opt = input(f"보기 {i}번을 입력하세요: ").strip()
+            while opt == "":
+                print("[알림] 보기 내용은 비어 있을 수 없습니다.")
+                opt = input(f"보기 {i}번을 입력하세요: ").strip()
+            choices.append(opt)
+
+        answer = self.get_valid_int("정답 번호를 입력하세요 (1-4): ", 1, 4)
+
+        data = self.storage.load()
+        data["questions"].append(
+            {"question": question, "choices": choices, "answer": answer}
+        )
+
+        if self.storage.save(data):
+            print("\n문제가 성공적으로 추가되었습니다!")
+        else:
+            print("\n[알림] 문제를 저장하지 못해 추가가 취소되었습니다.")
+
+        input("\n엔터를 누르면 메뉴로 돌아갑니다...")
+
     def main_menu(self):
         while True:
             print("="*40)
@@ -83,7 +113,7 @@ class QuizCLI:
             if choice == 1:
                 self.run_quiz()
             elif choice == 2:
-                print("준비 중입니다.")
+                self.add_new_question()
             elif choice == 3:
                 print("준비 중입니다.")
             elif choice == 4:
