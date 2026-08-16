@@ -52,7 +52,9 @@ class Storage:
 
             return data
 
-        except FileNotFoundError:
+        # 파일이 없거나(첫 실행) 열 수 없는 경우(권한 문제 등)를 모두 처리한다.
+        # FileNotFoundError와 PermissionError는 둘 다 OSError의 하위 클래스다.
+        except OSError:
             return self.get_default_data()
 
         except ValueError:
