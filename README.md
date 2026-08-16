@@ -29,17 +29,13 @@ Python 기본 문법으로 콘솔 프로그램 하나를 처음부터 끝까지 
 
 Git 측면에서는 기능 단위 커밋, 브랜치 분리와 병합, 원격 저장소 활용(`clone` / `pull`)을 직접 수행했다.
 
-과제 요구사항과 채점 기준은 `docs/미션.md`, `docs/평가기준.md`에 있다. 진행 과정과 설계 판단은 `docs/작업기록.md`에 정리했다.
-
 ---
 
 ## II. 퀴즈 주제 선정 이유
 
 주제: **세계 문학 작가**
 
-평소 세계문학을 즐겨 읽고 작가들에게도 관심이 많아 선택했다. 아는 분야라 문제와 오답 선택지를 직접 만들 수 있었고, 5문제를 채우는 데 별도 조사가 거의 필요 없었다.
-
-형식 면에서도 적합. 작품과 작가의 짝은 정답이 하나로 정해져 4지선다에 맞고, 오답 선택지를 같은 시대·국적의 작가로 채우면 난이도 조절이 가능하다.
+평소 세계문학을 즐겨 읽고 작가들에게도 관심이 많아 선택했다. 아는 분야라 문제와 오답 선택지를 직접 만들 수 있었고, 5문제를 채우는 데 별도 조사가 거의 필요 없었다. 형식 면에서도 작품과 작가의 짝은 정답이 하나로 정해져 4지선다에 맞았다. 오답 선택지를 같은 시대·국적의 작가로 채우면 난이도 조절이 가능했다.
 
 기본 문제 5개.
 
@@ -65,8 +61,7 @@ python main.py
 
 첫 실행 시 `state.json`이 없으므로 기본 퀴즈 5개로 시작. 퀴즈를 풀거나 추가하면 파일이 자동 생성된다.
 
-<details>
-<summary>메뉴 화면</summary>
+### 메뉴 화면
 
 ```
 PS C:\Users\Yuhyun Lim\e2-final> python main.py
@@ -82,12 +77,14 @@ PS C:\Users\Yuhyun Lim\e2-final> python main.py
 메뉴를 선택하세요 (1-5):
 ```
 
+<details>
+<summary>menu.png</summary>
+
 ![메뉴 화면](docs/screenshots/menu.png)
 
 </details>
 
-<details>
-<summary>퀴즈 풀기</summary>
+### 퀴즈 풀기
 
 ```
 메뉴를 선택하세요 (1-5): 1
@@ -114,12 +111,14 @@ Q.2: 소설 '1984'와 '동물농장'을 쓴 영국 작가는?
 현재 점수: 1/2
 ```
 
+<details>
+<summary>play.png</summary>
+
 ![퀴즈 풀기](docs/screenshots/play.png)
 
 </details>
 
-<details>
-<summary>퀴즈 추가</summary>
+### 퀴즈 추가
 
 ```
 메뉴를 선택하세요 (1-5): 2
@@ -136,12 +135,14 @@ Q.2: 소설 '1984'와 '동물농장'을 쓴 영국 작가는?
 엔터를 누르면 메뉴로 돌아갑니다...
 ```
 
+<details>
+<summary>add_quiz.png</summary>
+
 ![퀴즈 추가](docs/screenshots/add_quiz.png)
 
 </details>
 
-<details>
-<summary>퀴즈 목록</summary>
+### 퀴즈 목록
 
 ```
 메뉴를 선택하세요 (1-5): 3
@@ -156,12 +157,14 @@ Q.2: 소설 '1984'와 '동물농장'을 쓴 영국 작가는?
 엔터를 누르면 메뉴로 돌아갑니다...
 ```
 
+<details>
+<summary>quiz_list.png</summary>
+
 ![퀴즈 목록](docs/screenshots/quiz_list.png)
 
 </details>
 
-<details>
-<summary>퀴즈 추가 후 목록 (5개 → 6개)</summary>
+### 퀴즈 추가 후 목록 (5개 → 6개)
 
 ```
 메뉴를 선택하세요 (1-5): 3
@@ -177,14 +180,16 @@ Q.2: 소설 '1984'와 '동물농장'을 쓴 영국 작가는?
 엔터를 누르면 메뉴로 돌아갑니다...
 ```
 
-![퀴즈 추가 후 목록](docs/screenshots/quiz_list_after_add.png)
+<details>
+<summary>quiz_list_after_add.png</summary>
 
-추가한 퀴즈가 `state.json`에 저장되어 목록에 반영된다.
+![퀴즈 추가 후 목록](docs/screenshots/quiz_list_after_add.png)
 
 </details>
 
-<details>
-<summary>점수 확인</summary>
+추가한 퀴즈가 `state.json`에 저장되어 목록에 반영된다.
+
+### 점수 확인
 
 ```
 메뉴를 선택하세요 (1-5): 4
@@ -198,6 +203,9 @@ Q.2: 소설 '1984'와 '동물농장'을 쓴 영국 작가는?
 
 엔터를 누르면 메뉴로 돌아갑니다...
 ```
+
+<details>
+<summary>score.png</summary>
 
 ![점수 확인](docs/screenshots/score.png)
 
@@ -248,25 +256,18 @@ Q.2: 소설 '1984'와 '동물농장'을 쓴 영국 작가는?
 
 ### 입력 예외 처리
 
-입력 검증 함수는 두 개. 검사할 대상이 다르다.
+입력에서 생기는 문제를 두 갈래로 나눴다. **잘못 입력한 것은 다시 묻고, 중단 신호는 저장하고 끝낸다.**
 
-| 함수 | 검사 내용 | 쓰이는 곳 |
+#### 다시 묻는다 — 잘못된 입력
+
+검증 함수 두 개가 조건을 만족할 때까지 `while`로 되묻는다. 검사 대상만 다르다.
+
+| 함수 | 걸러내는 입력 | 쓰이는 곳 |
 |---|---|---|
-| `get_valid_int(prompt, min, max)` | 숫자인지, 허용 범위 안인지 | 메뉴 선택(1~5), 정답 입력(1~4), 정답 번호 입력(1~4) |
-| `get_nonempty_text(prompt)` | 비어 있지 않은지 | 문제 지문, 보기 1~4번 |
+| `get_valid_int(prompt, min, max)` | 빈 입력, 숫자 아님(`abc`), 범위 밖(`9`·`0`) | 메뉴 선택, 정답 입력, 정답 번호 |
+| `get_nonempty_text(prompt)` | 빈 입력 | 문제 지문, 보기 1~4번 |
 
-둘 다 조건을 만족할 때까지 `while`로 다시 묻는다. 허용 범위만 인자로 바꾸면 되므로 같은 함수를 여러 곳에서 재사용한다.
-
-| 입력 | 동작 |
-|---|---|
-| `" 1 "` (앞뒤 공백) | 공백 제거 후 1로 인식 |
-| `abc` (숫자 아님) | "숫자만 입력 가능합니다" 후 재입력 |
-| `9`, `0` (범위 밖) | "1~5 사이의 숫자를 입력해주세요" 후 재입력 |
-| (빈 입력) | "입력이 비어 있습니다" 후 재입력 |
-| `Ctrl+C` / 입력 종료 | 진행 기록 저장 후 안내하고 정상 종료 |
-
-<details>
-<summary>잘못된 입력 처리 화면</summary>
+둘 다 `input(...).strip()`으로 앞뒤 공백을 먼저 없애므로 `" 1 "`도 `1`로 인식한다. 허용 범위는 인자로 넘기기 때문에 같은 함수를 세 곳에서 재사용한다.
 
 ```
 메뉴를 선택하세요 (1-5): abc
@@ -278,11 +279,14 @@ Q.2: 소설 '1984'와 '동물농장'을 쓴 영국 작가는?
 메뉴를 선택하세요 (1-5):
 ```
 
-세 경우 모두 프로그램이 멈추지 않고 같은 질문을 다시 던진다.
+<details>
+<summary>invalid_input.png</summary>
 
 ![잘못된 입력 처리](docs/screenshots/invalid_input.png)
 
 </details>
+
+어느 경우든 프로그램이 멈추지 않고 같은 질문을 다시 던진다.
 
 <details>
 <summary>입력 검증 코드 (quiz_cli.py)</summary>
@@ -319,14 +323,20 @@ Q.2: 소설 '1984'와 '동물농장'을 쓴 영국 작가는?
             return text
 ```
 
-두 함수 모두 같은 구조. `while True`로 반복하다가 조건을 만족하면 `return`으로 빠져나오고, 만족하지 못하면 안내 후 `continue`로 다시 묻는다.
+`while True`로 반복하다가 조건을 만족하면 `return`으로 빠져나오고, 아니면 안내 후 `continue`로 다시 묻는다.
 
 </details>
 
-<details>
-<summary>강제 종료 처리 코드 (main.py)</summary>
+#### 끝낸다 — Ctrl+C와 EOF
 
-`Ctrl+C`는 프로그램 어디서든 발생 가능. `input()`마다 처리를 넣으면 같은 코드가 흩어지므로, 예외가 거슬러 올라오는 진입점에서 한 번만 처리한다.
+사용자가 `Ctrl+C`를 누르면 [`KeyboardInterrupt`](main.py#L10-L12), 입력 스트림이 닫히면 [`EOFError`](main.py#L13-L15)가 발생한다.
+
+둘 다 프로그램 어디서든 나올 수 있다. `input()`마다 처리를 넣으면 같은 코드가 흩어지므로, 예외가 호출한 함수를 거슬러 올라오는 성질을 이용해 **진입점에서 한 번만** 잡는다.
+
+퀴즈 도중이었다면 `run_quiz`가 먼저 기록을 저장하고 인자 없는 `raise`로 예외를 다시 던진다. **저장은 데이터를 아는 곳에서, 종료 안내는 진입점에서.**
+
+<details>
+<summary>강제 종료 처리 코드 (main.py, quiz_cli.py)</summary>
 
 ```python
 if __name__ == "__main__":
@@ -341,16 +351,12 @@ if __name__ == "__main__":
         sys.exit(0)
 ```
 
-퀴즈 도중 중단 시에는 `run_quiz`가 먼저 기록을 저장한 뒤 예외를 다시 던진다.
-
 ```python
         except (KeyboardInterrupt, EOFError):
             print(f"퀴즈 중단! 지금까지 점수: {game.score}/{game.quiz_number}")
             self.save_result(data, game)
             raise
 ```
-
-인자 없는 `raise`는 방금 잡은 예외를 그대로 다시 던진다. 저장은 데이터를 아는 곳에서, 종료 안내는 진입점에서 담당하도록 역할을 나눈 것.
 
 </details>
 
@@ -385,65 +391,6 @@ e2-final/
 | `QuizGame` | 한 판의 진행 상태 — 현재 문제 번호, 점수, 남은 문제 여부 | 채점 방식 변경 |
 | `Storage` | `state.json` 읽기·쓰기, 파일 없음·손상 시 복구 | 저장 방식 변경 |
 | `QuizCLI` | 메뉴 출력, 입력 검증, 위 세 클래스를 조합해 기능 완성 | 화면 문구·메뉴 구성 변경 |
-
-<details>
-<summary>메서드를 나눈 기준 — run_quiz 예시</summary>
-
-`run_quiz`는 처음에 60줄짜리 메서드였다. 불러오기, 객체 변환, 문제 진행, 중단 처리, 결과 저장을 한 곳에서 모두 했다. "이 함수가 무엇을 하나"를 한 문장으로 답할 수 없어 세 메서드로 분리했다.
-
-| 메서드 | 하는 일 |
-|---|---|
-| `create_quiz_list()` | 저장된 딕셔너리를 `Quiz` 객체로 변환 |
-| `ask_one_quiz()` | 문제 하나를 출제하고 채점 |
-| `save_result()` | 푼 횟수·최고 점수 갱신 후 저장 |
-
-분리 후 `run_quiz`는 흐름만 남는다.
-
-```python
-        total = len(data["quizzes"])
-        game = QuizGame(self.create_quiz_list(data["quizzes"]))
-
-        try:
-            while game.still_has_quizzes():
-                self.ask_one_quiz(game)
-        except (KeyboardInterrupt, EOFError):
-            ...
-            raise
-
-        print(f"퀴즈 종료! 최종 점수: {game.score}/{total}")
-        self.save_result(data, game)
-```
-
-`while game.still_has_quizzes(): self.ask_one_quiz(game)` — "남은 문제가 있는 동안 한 문제씩 출제한다"로 읽힌다.
-
-</details>
-
-<details>
-<summary>클래스를 쓴 이유 — 함수만으로 만들었다면</summary>
-
-`Quiz`의 메서드는 인자를 거의 받지 않는다. 필요한 데이터를 객체가 이미 갖고 있기 때문.
-
-```python
-class Quiz:
-    def __init__(self, question, choices, answer):
-        self.question = question
-        self.choices = choices
-        self.answer = answer
-
-    def show(self, quiz_number):
-        print(f"\nQ.{quiz_number}: {self.question}")
-        for number, choice in enumerate(self.choices, 1):
-            print(f"   {number}) {choice}")
-
-    def is_correct(self, user_answer):
-        return user_answer == self.answer
-```
-
-함수만으로 만들면 `show_quiz(question, choices)`처럼 매번 데이터를 넘겨야 하고, 문제가 여러 개일 때 지문·선택지·정답의 짝이 어긋나지 않도록 따로 관리해야 한다.
-
-정답 판정도 `Quiz.is_correct()` 한 곳에만 있어, 채점 규칙이 바뀌면 그 메서드만 고치면 된다.
-
-</details>
 
 ---
 
@@ -539,22 +486,23 @@ class Quiz:
 
 병합 전에는 두 갈래로 갈라져 있고(`|/`), 병합 후 다시 합쳐진다(`|\`). 병합 커밋은 부모가 둘이라 이런 모양이 생긴다.
 
-<details>
-<summary>브랜치 생성</summary>
+### 브랜치 생성
 
 ```
 $ git checkout -b feature/quiz_game
 Switched to a new branch 'feature/quiz_game'
 ```
 
-`-b`는 브랜치를 새로 만들면서 그쪽으로 이동한다는 뜻. 새 브랜치는 현재 커밋에서 갈라진다.
+<details>
+<summary>git_branch.png</summary>
 
 ![브랜치 생성](docs/screenshots/git_branch.png)
 
 </details>
 
-<details>
-<summary>git log --oneline --graph (병합 전)</summary>
+`-b`는 브랜치를 새로 만들면서 그쪽으로 이동한다는 뜻. 새 브랜치는 현재 커밋에서 갈라진다.
+
+### git log --oneline --graph (병합 전)
 
 ```
 $ git --no-pager log --oneline --graph --all
@@ -568,14 +516,16 @@ $ git --no-pager log --oneline --graph --all
 * 3c3ab67 Chore: 저장소 초기 설정 (.gitignore, README 초안 추가)
 ```
 
-`7ffba24`에서 두 갈래로 갈라진 상태(`|/`). 왼쪽이 `feature/quiz_game`, 오른쪽이 `main`.
+<details>
+<summary>git_log_graph_before_merge.png</summary>
 
 ![병합 전](docs/screenshots/git_log_graph_before_merge.png)
 
 </details>
 
-<details>
-<summary>git log --oneline --graph (병합 후)</summary>
+`7ffba24`에서 두 갈래로 갈라진 상태(`|/`). 왼쪽이 `feature/quiz_game`, 오른쪽이 `main`.
+
+### git log --oneline --graph (병합 후)
 
 ```
 $ git --no-pager log --oneline --graph
@@ -591,11 +541,14 @@ $ git --no-pager log --oneline --graph
 * 3c3ab67 Chore: 저장소 초기 설정 (.gitignore, README 초안 추가)
 ```
 
-맨 위에 병합 커밋 `cdab26e`가 생기고, 갈라졌던 두 갈래가 다시 합쳐진다(`|\`). 아래 `|/`(갈라짐)와 위 `|\`(합쳐짐)가 짝을 이뤄 다이아몬드 모양이 된다.
+<details>
+<summary>git_log_graph_after_merge.png</summary>
 
 ![병합 후](docs/screenshots/git_log_graph_after_merge.png)
 
 </details>
+
+맨 위에 병합 커밋 `cdab26e`가 생기고, 갈라졌던 두 갈래가 다시 합쳐진다(`|\`). 아래 `|/`(갈라짐)와 위 `|\`(합쳐짐)가 짝을 이뤄 다이아몬드 모양이 된다.
 
 ### 커밋 메시지
 
@@ -623,7 +576,7 @@ git clone https://github.com/hauteville1862/e2-final.git
 ```
 
 <details>
-<summary>clone 실행 화면</summary>
+<summary>git_clone.png</summary>
 
 ![clone 실습](docs/screenshots/git_clone.png)
 
@@ -640,7 +593,7 @@ git pull
 ```
 
 <details>
-<summary>pull 실행 화면</summary>
+<summary>git_pull.png</summary>
 
 ![pull 실습](docs/screenshots/git_pull.png)
 
