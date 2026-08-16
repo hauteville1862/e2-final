@@ -45,23 +45,34 @@ class QuizCLI:
             )
 
         game = QuizGame(quiz_bank)
-        while game.still_has_quizzes():
-            current_quiz = game.get_current_quiz()
+        interrupted = None
 
-            current_quiz.show(game.quiz_number + 1)
+        # 퀴즈 도중 Ctrl+C나 입력 종료가 발생해도 지금까지의 기록을 저장한 뒤 종료한다.
+        try:
+            while game.still_has_quizzes():
+                current_quiz = game.get_current_quiz()
 
-            user_answer = self.get_valid_int("\n정답을 입력하세요 (1-4): ", 1, 4)
+                current_quiz.show(game.quiz_number + 1)
 
-            if game.submit_answer(user_answer):
-                print("정답입니다!")
-            else:
-                print("틀렸습니다.")
-                print(f"정답은 {current_quiz.answer}번이었습니다.")
+                user_answer = self.get_valid_int("\n정답을 입력하세요 (1-4): ", 1, 4)
 
-            print(f"현재 점수: {game.score}/{game.quiz_number}")
+                if game.submit_answer(user_answer):
+                    print("정답입니다!")
+                else:
+                    print("틀렸습니다.")
+                    print(f"정답은 {current_quiz.answer}번이었습니다.")
+
+                print(f"현재 점수: {game.score}/{game.quiz_number}")
+
+        except (KeyboardInterrupt, EOFError) as error:
+            interrupted = error
 
         print("\n" + "=" * 30)
-        print(f"퀴즈 종료! 최종 점수: {game.score}/{len(quiz_bank)}")
+
+        if interrupted is not None:
+            print(f"퀴즈 중단! 지금까지 점수: {game.score}/{game.quiz_number}")
+        else:
+            print(f"퀴즈 종료! 최종 점수: {game.score}/{len(quiz_bank)}")
 
         data["play_count"] += 1
 
@@ -73,6 +84,12 @@ class QuizCLI:
             print("[알림] 기록을 저장하지 못했습니다.")
 
         print("=" * 30)
+
+        # 저장을 마쳤으니 원래 받은 중단 신호를 그대로 다시 올려보낸다.
+        # main.py가 Ctrl+C인지 입력 종료인지 구분해 안내하고 종료한다.
+        if interrupted is not None:
+            raise interrupted
+
         self.wait_for_enter()
 
     def add_new_quiz(self):

@@ -43,6 +43,11 @@ class Storage:
             with open(self.path, "r", encoding="utf-8") as file:
                 data = json.load(file)
 
+            # 파일 내용이 숫자나 문자열 하나뿐일 수도 있다.
+            # 그런 값에는 "키가 있는지" 확인하는 in 연산자를 쓸 수 없으므로 먼저 걸러낸다.
+            if not isinstance(data, dict):
+                raise ValueError("state.json이 올바른 형태가 아닙니다.")
+
             if "best_score" not in data or "quizzes" not in data:
                 raise ValueError("state.json 구조가 올바르지 않습니다.")
 
