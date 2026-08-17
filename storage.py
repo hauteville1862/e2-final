@@ -43,24 +43,22 @@ class Storage:
             with open(self.path, "r", encoding="utf-8") as file:
                 data = json.load(file)
 
-            # 파일 내용이 숫자나 문자열 하나뿐일 수도 있다.
-            # 그런 값에는 "키가 있는지" 확인하는 in 연산자를 쓸 수 없으므로 먼저 걸러낸다.
             if not isinstance(data, dict):
                 raise ValueError("state.json이 올바른 형태가 아닙니다.")
 
             if "best_score" not in data or "quizzes" not in data:
                 raise ValueError("state.json 구조가 올바르지 않습니다.")
-
-            # play_count는 나중에 추가된 항목이라, 예전에 저장된 파일에는 없을 수 있다.
-            # 없으면 0으로 채워서 기존 퀴즈 데이터를 잃지 않고 그대로 사용한다.
+            
             if "play_count" not in data:
                 data["play_count"] = 0
 
             return data
 
-        # 파일이 없거나(첫 실행) 열 수 없는 경우(권한 문제 등)를 모두 처리한다.
-        # FileNotFoundError와 PermissionError는 둘 다 OSError의 하위 클래스다.
-        except OSError:
+        except FileNotFoundError:
+            return self.get_default_data()
+
+        except OSError as error:
+            print(f"\n[알림] 데이터 파일을 열 수 없습니다. ({error})")
             return self.get_default_data()
 
         except ValueError:
